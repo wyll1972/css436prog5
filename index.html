@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+    <body style="text-align: center; font-size: x-large">
+        <h1>USA Covid-19 data</h1>
+
+        <div>
+            <button onclick="loadButtonClicked()">Load Data</button>
+            <form name="inputForm">
+                city:
+                <input type="text" name="city" value=""/>
+                state:
+                <input type="text" name="state" value=""/>
+            </form>
+            <button onclick="queryButtonClicked()">Query Data</button>
+    
+            <p id="userfeedback"></p>
+            <p id="queryresults"></p>
+        </div>
+        
+        <script language="Javascript">
+            function loadButtonClicked() {
+                
+            }
+
+            
+
+            function queryButtonClicked() {
+                document.getElementById("queryresults").innerHTML = "";
+                var cityInput = document.forms["inputForm"]["city].value.trim();
+                var stateInput = document.forms["inputForm"]["state"].value.trim();
+
+                document.getElementById("userfeedback").innerHTML = "Querying......";
+                if (cityInput == "" && StateInput == "") {
+                    alert("Querying the database requires at least 1 input value");
+                    return;
+                }
+                
+                queryTableURL = "";     //URL FOR QUERY TABLE
+                var request = new XMLHttpRequest();
+                request.open("PUT", queryTableURL, true);
+                request.send(JSON.stringify({"city": cityInput, "state": stateInput}));
+                request.onreadystatechange = function () {
+                if (request.readyState == 4 && request.status == 200) {
+                        document.getElementById("userfeedback").innerHTML = "Query Matches:";
+                        const responseJSON = request.responseText;
+                        const response = JSON.parse(responseJSON);
+                        document.getElementById("queryresults").innerHTML = request.responseText;
+                    }
+                };
+            }
+        </script>
+    </body>
+</html>
